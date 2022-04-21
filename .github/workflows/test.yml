@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-latest]
+    runs-on: '${{ matrix.os }}'
+    name: 'Test: ${{ matrix.os }}'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up WireGuard
+        uses: ./
+        with:
+          endpoint: '${{ secrets.ENDPOINT }}'
+          endpoint_public_key: '${{ secrets.ENDPOINT_PUBLIC_KEY }}'
+          peer_ip: '${{ secrets.PEER_IP }}'
+          allowed_ips: '${{ secrets.ALLOWED_IPS }}'
+          private_key: '${{ secrets.PRIVATE_KEY }}'
+          preshared_key: '${{ secrets.PRESHARED }}'
+      - name: Check endpoint
+        run: ping -W 10 -c 5 -- '${{ secrets.PING_IP }}'

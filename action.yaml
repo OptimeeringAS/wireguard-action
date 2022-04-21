@@ -1,0 +1,40 @@
+name: Set up WireGuard
+description: Set up WireGuard connection
+
+inputs:
+  endpoint:
+    description: Endpoint in the HOST:PORT format
+    required: true
+  endpoint_public_key:
+    description: Public key of the endpoint
+    required: true
+  peer_ip:
+    description: Client IP addresses
+    required: true
+  allowed_ips:
+    description: Comma-separated list of netmasks
+    required: true
+  private_key:
+    description: Private key
+    required: true
+  preshared_key:
+    description: Preshared key
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - run: ./wireguard.sh
+      shell: bash
+      env:
+        ENDPOINT: ${{ inputs.endpoint }}
+        PUBLIC_KEY: ${{ inputs.endpoint_public_key }}
+        PEER_IP: ${{ inputs.peer_ip }}
+        ALLOWED_IPS: ${{ inputs.allowed_ips }}
+        PRIVATE_KEY: ${{ inputs.private_key }}
+        PRESHARED_KEY: ${{ inputs.preshared_key }}
+        
+
+branding:
+  icon: star
+  color: green
