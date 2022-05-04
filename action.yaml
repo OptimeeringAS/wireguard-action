@@ -24,7 +24,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: wireguard.sh
+    - run: ${{ github.action_path }}/wireguard.sh
       shell: bash
       env:
         ENDPOINT: ${{ inputs.endpoint }}
